@@ -21,6 +21,7 @@ http.Client fakeBackendClient() {
           'id': 'e$i',
           'title': 'Project payout #${3000 - i}',
           'amount': 100 + rng.nextInt(4900),
+          'currency': i % 5 == 0 ? 'USD' : 'INR', // every 5th entry in dollars
           'date': now.subtract(Duration(hours: i * 6)).toIso8601String(),
         };
       });
