@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../controllers/earnings_controller.dart';
@@ -15,54 +14,48 @@ class HomeScreen extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
 
-    // No AppBar on this screen, so tell the OS to use light status bar icons on the dark background.
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: Scaffold(
-        body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              const SizedBox(height: 12),
-              Text(
-                'Funngro',
-                style: text.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+    return Scaffold(
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            const SizedBox(height: 12),
+            Text(
+              'Funngro',
+              style: text.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Mobile Engineer (Flutter) assessment',
+              style: text.bodyLarge?.copyWith(color: colors.onSurfaceVariant),
+            ),
+            const SizedBox(height: 28),
+            _HomeCard(
+              icon: Icons.account_balance_wallet_rounded,
+              title: 'My Earnings',
+              subtitle: 'Part 1 · 3,000 entries with live wallet updates',
+              // The binding creates the controller together with the route, and GetX
+              // deletes it (calling onClose) when the route is popped.
+              onTap: () => Get.to(
+                () => const EarningsScreen(),
+                binding: BindingsBuilder(() {
+                  Get.put(EarningsController(userId: 'demo_user'));
+                }),
               ),
-              const SizedBox(height: 4),
-              Text(
-                'Mobile Engineer (Flutter) assessment',
-                style: text.bodyLarge?.copyWith(color: colors.onSurfaceVariant),
+            ),
+            const SizedBox(height: 12),
+            _HomeCard(
+              icon: Icons.work_rounded,
+              title: 'Projects',
+              subtitle: 'Part 2 · Infinite scroll on a flaky API',
+              onTap: () => Get.to(
+                () => const ProjectsScreen(),
+                binding: BindingsBuilder(() {
+                  Get.put(ProjectsController());
+                }),
               ),
-              const SizedBox(height: 28),
-              _HomeCard(
-                icon: Icons.account_balance_wallet_rounded,
-                title: 'My Earnings',
-                subtitle: 'Part 1 · 3,000 entries with live wallet updates',
-                // The binding creates the controller together with the route, and GetX
-                // deletes it (calling onClose) when the route is popped.
-                onTap: () => Get.to(
-                  () => const EarningsScreen(),
-                  binding: BindingsBuilder(() {
-                    Get.put(EarningsController(userId: 'demo_user'));
-                  }),
-                ),
-              ),
-              const SizedBox(height: 12),
-              _HomeCard(
-                icon: Icons.work_rounded,
-                title: 'Projects',
-                subtitle: 'Part 2 · Infinite scroll on a flaky API',
-                onTap: () => Get.to(
-                  () => const ProjectsScreen(),
-                  binding: BindingsBuilder(() {
-                    Get.put(ProjectsController());
-                  }),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

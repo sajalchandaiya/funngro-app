@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'constants/themes/app_theme.dart';
@@ -9,6 +10,9 @@ import 'screens/home_screen.dart';
 void main() {
   // DEMO ONLY: there is no real backend, so HttpHelper talks to a fake one.
   HttpHelper.client = fakeBackendClient();
+
+  // Light status bar icons, since the whole app has a dark background.
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
   runApp(const MyApp());
 }
