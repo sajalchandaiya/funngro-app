@@ -8,11 +8,11 @@ class ProjectsController extends GetxController {
   final ProjectsApi _api = ProjectsApi();
   final scrollController = ScrollController();
 
-  final projects = <Project>[].obs;
-  final isPageLoading = false.obs; // a page request is in flight
+  List<Project> projects = <Project>[].obs;
+  RxBool isPageLoading = false.obs; // a page request is in flight
   final pageError = RxnString(); // the last page request failed
-  final hasMore = true.obs; // false once the API returns an empty page
-  final showScrollToTop = false.obs; // the "back to top" button is visible
+  RxBool hasMore = true.obs; // false once the API returns an empty page
+  RxBool showScrollToTop = false.obs; // the "back to top" button is visible
 
   int _nextPage = 0;
   bool _isRefreshing = false;

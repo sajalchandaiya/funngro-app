@@ -19,15 +19,15 @@ class EarningsController extends GetxController {
   final WalletHelper _wallet = WalletHelper();
   StreamSubscription<WalletUpdate>? _walletSubscription;
 
-  final earnings = <Earning>[].obs;
   // true from the start, so the first frame shows a loader
-  final isLoading = true.obs;
+  List<Earning> earnings = <Earning>[].obs;
+  RxBool isLoading = true.obs;
   final error = RxnString();
   // id of the earning whose detail is loading (blocks double taps)
   final openingId = RxnString();
 
   final scrollController = ScrollController();
-  final showScrollToTop = false.obs; // the "back to top" button is visible
+  RxBool showScrollToTop = false.obs; // the "back to top" button is visible
 
   // Runs ONCE when the controller is created - not on every rebuild like build() does.
   @override
