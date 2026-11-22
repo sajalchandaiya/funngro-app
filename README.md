@@ -21,6 +21,7 @@ lib/
   models/        Earning, EarningDetail, WalletUpdate, Project
   screens/       Home, Earnings, EarningDetail, Projects   (UI only)
   controllers/   EarningsController, ProjectsController    (state + logic)
+  constants/     colors/app_colors.dart (palette), themes/app_theme.dart (ThemeData)
   helpers/       http_helper (shared CRUD), projects_api (given fake API, as-is),
                  wallet_helper, api_exception, fake_backend (demo)
 docs/
