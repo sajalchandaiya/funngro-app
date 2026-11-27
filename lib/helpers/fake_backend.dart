@@ -15,6 +15,7 @@ http.Client fakeBackendClient() {
 
     // GET /users/{userId}/earnings  -> 3,000 earnings (worst-case user)
     if (path.length == 3 && path[0] == 'users' && path[2] == 'earnings') {
+      print("==================> WALLET CONNECTED");
       final now = DateTime.now();
       final earnings = List.generate(3000, (i) {
         return {

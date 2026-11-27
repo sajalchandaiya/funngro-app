@@ -17,47 +17,100 @@ class EarningsScreen extends GetView<EarningsController> {
         visible: controller.showScrollToTop,
         onPressed: controller.scrollToTop,
       ),
-      body: Obx(() {
-        // 1. First load
-        if (controller.isLoading.value && controller.earnings.isEmpty) {
-          return const LoadingView(message: 'Loading your earnings...');
-        }
+      body: Column(
+        children: [
+          const _WalletBanner(),
+          Expanded(child: _buildBody()),
+        ],
+      ),
+    );
+  }
 
-        // 2. First load failed
-        if (controller.error.value != null && controller.earnings.isEmpty) {
-          return ErrorView(
-            message: controller.error.value!,
-            onRetry: controller.loadEarnings,
-          );
-        }
+  Widget _buildBody() {
+    return Obx(() {
+      // 1. First load
+      if (controller.isLoading.value && controller.earnings.isEmpty) {
+        return const LoadingView(message: 'Loading your earnings...');
+      }
 
-        // 3. Loaded, but nothing yet
-        if (controller.earnings.isEmpty) {
-          return const Center(
-            child: Text(
-              'No earnings yet. Finish a project to get your first payout!',
-            ),
-          );
-        }
+      // 2. First load failed
+      if (controller.error.value != null && controller.earnings.isEmpty) {
+        return ErrorView(
+          message: controller.error.value!,
+          onRetry: controller.loadEarnings,
+        );
+      }
 
-        // 4. The list. ListView.builder only builds the rows on screen (~10),
-        //    not all 3,000. itemExtent tells Flutter every row is 72px tall,
-        //    so it doesn't have to measure each row while scrolling.
-        return RefreshIndicator(
-          onRefresh: controller.loadEarnings,
-          child: ListView.builder(
-            controller: controller.scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: controller.earnings.length,
-            itemExtent: 72,
-            itemBuilder: (context, index) {
-              final earning = controller.earnings[index];
-              return _EarningTile(key: ValueKey(earning.id), earning: earning);
-            },
+      // 3. Loaded, but nothing yet
+      if (controller.earnings.isEmpty) {
+        return const Center(
+          child: Text(
+            'No earnings yet. Finish a project to get your first payout!',
           ),
         );
-      }),
-    );
+      }
+
+      // 4. The list. ListView.builder only builds the rows on screen (~10),
+      //    not all 3,000. itemExtent tells Flutter every row is 72px tall,
+      //    so it doesn't have to measure each row while scrolling.
+      return RefreshIndicator(
+        onRefresh: controller.loadEarnings,
+        child: ListView.builder(
+          controller: controller.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: controller.earnings.length,
+          itemExtent: EarningsController.rowHeight,
+          itemBuilder: (context, index) {
+            final earning = controller.earnings[index];
+            return _EarningTile(key: ValueKey(earning.id), earning: earning);
+          },
+        ),
+      );
+    });
+  }
+}
+
+class _WalletBanner extends GetView<EarningsController> {
+  const _WalletBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Obx(() {
+      final attempt = controller.walletRetryAttempt.value;
+      return AnimatedSize(
+        duration: const Duration(milliseconds: 200),
+        child: attempt == 0
+            ? const SizedBox(width: double.infinity)
+            : Container(
+                width: double.infinity,
+                color: colors.primaryContainer,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        strokeCap: StrokeCap.round,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Live updates paused. Reconnecting (attempt $attempt)...',
+                        style: TextStyle(color: colors.onSurfaceVariant),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+      );
+    });
   }
 }
 
