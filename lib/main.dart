@@ -12,7 +12,7 @@ void main() {
   HttpHelper.client = fakeBackendClient();
 
   // Light status bar icons, since the whole app has a dark background.
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
   runApp(const MyApp());
 }
